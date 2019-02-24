@@ -367,7 +367,7 @@ public class PdfDocument extends Document {
     public float getLeading() {
     	return leading;
     }
-    
+
     /**
      * Setter for the current leading.
      * @param	leading the current leading
@@ -769,6 +769,7 @@ public class PdfDocument extends Document {
             return true;
         }
         catch(Exception e) {
+        	e.printStackTrace();
             throw new DocumentException(e);
         }
     }
@@ -1035,7 +1036,7 @@ public class PdfDocument extends Document {
         }
         return super.setMarginMirroring(MarginMirroring);
     }
-    
+
     /**
      * @see com.itextpdf.text.DocListener#setMarginMirroring(boolean)
      * @since	2.1.6

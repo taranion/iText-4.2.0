@@ -67,9 +67,9 @@ import com.itextpdf.text.pdf.fonts.FontsResourceAnchor;
 class Type1Font extends BaseFont
 {
     private static FontsResourceAnchor resourceAnchor;
-    
+
     /** The PFB file if the input was made with a <CODE>byte</CODE> array.
-     */    
+     */
     protected byte pfb[];
 /** The Postscript font name.
  */
@@ -135,7 +135,7 @@ class Type1Font extends BaseFont
 /** A variable.
  */
     private int StdVW = 80;
-    
+
 /** Represents the section CharMetrics in the AFM file. Each
  *  value of this array contains a <CODE>Object[4]</CODE> with an
  *  Integer, Integer, String and int[]. This is the code, width, name and char bbox.
@@ -159,7 +159,7 @@ class Type1Font extends BaseFont
  *  They have to appear in the PFB file in this sequence.
  */
     private static final int PFB_TYPES[] = {1, 2, 1};
-    
+
     /** Creates a new Type1 font.
      * @param ttfAfm the AFM file if the input is made with a <CODE>byte</CODE> array
      * @param pfb the PFB file if the input is made with a <CODE>byte</CODE> array
@@ -190,6 +190,9 @@ class Type1Font extends BaseFont
                 if (resourceAnchor == null)
                     resourceAnchor = new FontsResourceAnchor();
                 is = getResourceStream(RESOURCE_PATH + afmFile + ".afm", resourceAnchor.getClass().getClassLoader());
+                if (is == null) {
+                	is = resourceAnchor.getClass().getResourceAsStream("fonts/"+ afmFile + ".afm");
+                }
                 if (is == null) {
                     String msg = MessageLocalization.getComposedMessage("1.not.found.as.resource", afmFile);
                     System.err.println(msg);
@@ -282,7 +285,7 @@ class Type1Font extends BaseFont
             PdfEncodings.convertToBytes(" ", enc); // check if the encoding exists
         createEncoding();
     }
-    
+
 /** Gets the width from the font according to the <CODE>name</CODE> or,
  * if the <CODE>name</CODE> is null, meaning it is a symbolic font,
  * the char <CODE>c</CODE>.
@@ -304,7 +307,7 @@ class Type1Font extends BaseFont
             return ((Integer)(metrics[1])).intValue();
         return 0;
     }
-    
+
 /** Gets the kerning between two Unicode characters. The characters
  * are converted to names and this names are used to find the kerning
  * pairs in the <CODE>HashMap</CODE> <CODE>KernPairs</CODE>.
@@ -329,8 +332,8 @@ class Type1Font extends BaseFont
         }
         return 0;
     }
-    
-    
+
+
     /** Reads the font metrics
      * @param rf the AFM file
      * @throws DocumentException the AFM file is invalid
@@ -423,7 +426,7 @@ class Type1Font extends BaseFont
                 else if (ident.equals("N"))
                     N = tokc.nextToken();
                 else if (ident.equals("B")) {
-                    B = new int[]{Integer.parseInt(tokc.nextToken()), 
+                    B = new int[]{Integer.parseInt(tokc.nextToken()),
                                          Integer.parseInt(tokc.nextToken()),
                                          Integer.parseInt(tokc.nextToken()),
                                          Integer.parseInt(tokc.nextToken())};
@@ -491,7 +494,7 @@ class Type1Font extends BaseFont
             throw new DocumentException(MessageLocalization.getComposedMessage("missing.endkernpairs.in.1", fileName));
         rf.close();
     }
-    
+
 /** If the embedded flag is <CODE>false</CODE> or if the font is
  *  one of the 14 built in types, it returns <CODE>null</CODE>,
  * otherwise the font is read and output in a PdfStream object.
@@ -548,7 +551,7 @@ class Type1Font extends BaseFont
             }
         }
     }
-    
+
 /** Generates the font descriptor for this font or <CODE>null</CODE> if it is
  * one of the 14 built in fonts.
  * @param fontStream the indirect reference to a PdfStream containing the font or <CODE>null</CODE>
@@ -579,10 +582,10 @@ class Type1Font extends BaseFont
         if (Weight.equals("Bold"))
             flags |= 262144;
         dic.put(PdfName.FLAGS, new PdfNumber(flags));
-        
+
         return dic;
     }
-    
+
     /** Generates the font dictionary for this font.
      * @return the PdfDictionary containing the font dictionary
      * @param firstChar the first valid character
@@ -608,7 +611,7 @@ class Type1Font extends BaseFont
             else {
                 PdfDictionary enc = new PdfDictionary(PdfName.ENCODING);
                 PdfArray dif = new PdfArray();
-                boolean gap = true;                
+                boolean gap = true;
                 for (int k = firstChar; k <= lastChar; ++k) {
                     if (shortTag[k] != 0) {
                         if (gap) {
@@ -640,7 +643,7 @@ class Type1Font extends BaseFont
             dic.put(PdfName.FONTDESCRIPTOR, fontDescriptor);
         return dic;
     }
-    
+
     /** Outputs to the writer the font dictionaries and streams.
      * @param writer the writer for this document
      * @param ref the font indirect reference
@@ -675,7 +678,7 @@ class Type1Font extends BaseFont
         pobj = getFontBaseType(ind_font, firstChar, lastChar, shortTag);
         writer.addToBody(pobj, ref);
     }
-    
+
     /** Gets the font parameter identified by <CODE>key</CODE>. Valid values
      * for <CODE>key</CODE> are <CODE>ASCENT</CODE>, <CODE>CAPHEIGHT</CODE>, <CODE>DESCENT</CODE>,
      * <CODE>ITALICANGLE</CODE>, <CODE>BBOXLLX</CODE>, <CODE>BBOXLLY</CODE>, <CODE>BBOXURX</CODE>
@@ -683,7 +686,7 @@ class Type1Font extends BaseFont
      * @param key the parameter to be extracted
      * @param fontSize the font size in points
      * @return the parameter in points
-     */    
+     */
     public float getFontDescriptor(int key, float fontSize) {
         switch (key) {
             case AWT_ASCENT:
@@ -715,14 +718,14 @@ class Type1Font extends BaseFont
         }
         return 0;
     }
-    
+
     /** Gets the postscript font name.
      * @return the postscript font name
      */
     public String getPostscriptFontName() {
         return FontName;
     }
-    
+
     /** Gets the full name of the font. If it is a True Type font
      * each array element will have {Platform ID, Platform Encoding ID,
      * Language ID, font name}. The interpretation of this values can be
@@ -734,7 +737,7 @@ class Type1Font extends BaseFont
     public String[][] getFullFontName() {
         return new String[][]{{"", "", "", FullName}};
     }
-    
+
     /** Gets all the entries of the names-table. If it is a True Type font
      * each array element will have {Name ID, Platform ID, Platform Encoding ID,
      * Language ID, font name}. The interpretation of this values can be
@@ -746,7 +749,7 @@ class Type1Font extends BaseFont
     public String[][] getAllNameEntries() {
         return new String[][]{{"4", "", "", "", FullName}};
     }
-    
+
     /** Gets the family name of the font. If it is a True Type font
      * each array element will have {Platform ID, Platform Encoding ID,
      * Language ID, font name}. The interpretation of this values can be
@@ -758,23 +761,23 @@ class Type1Font extends BaseFont
     public String[][] getFamilyFontName() {
         return new String[][]{{"", "", "", FamilyName}};
     }
-    
+
     /** Checks if the font has any kerning pairs.
      * @return <CODE>true</CODE> if the font has any kerning pairs
-     */    
+     */
     public boolean hasKernPairs() {
         return !KernPairs.isEmpty();
     }
-    
+
     /**
      * Sets the font name that will appear in the pdf font dictionary.
      * Use with care as it can easily make a font unreadable if not embedded.
      * @param name the new font name
-     */    
+     */
     public void setPostscriptFontName(String name) {
         FontName = name;
     }
-    
+
     /**
      * Sets the kerning between two Unicode chars.
      * @param char1 the first char
@@ -809,7 +812,7 @@ class Type1Font extends BaseFont
         KernPairs.put(first, obj2);
         return true;
     }
-    
+
     protected int[] getRawCharBBox(int c, String name) {
         Object metrics[];
         if (name == null) { // font specific
@@ -824,5 +827,5 @@ class Type1Font extends BaseFont
             return ((int[])(metrics[3]));
         return null;
     }
-    
+
 }

@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.itextpdf</groupId>
-	<artifactId>itext</artifactId>
+	<artifactId>itextpdf</artifactId>
 	<packaging>jar</packaging>
 	<name>iText, a Free Java-PDF library</name>
 	<version>4.2.0</version>
