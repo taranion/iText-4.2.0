@@ -87,14 +87,11 @@ public class RandomAccessFileOrArray implements DataInput {
 
     public RandomAccessFileOrArray(String filename, boolean forceRead, boolean plainRandomAccess) throws IOException {
         this.plainRandomAccess = plainRandomAccess;
-        System.out.println("Filename = "+filename);
         File file = new File(filename);
         if (!file.canRead()) {
             if (filename.startsWith("file:/") || filename.startsWith("http://")
                     || filename.startsWith("https://") || filename.startsWith("jar:") || filename.startsWith("wsjar:") || filename.startsWith("jrt:")) {
-            	System.out.println("Try as stream via URL");
                 InputStream is = new URL(filename).openStream();
-            	System.out.println("is = "+is);
                 try {
                     this.arrayIn = InputStreamToArray(is);
                     return;
@@ -104,7 +101,6 @@ public class RandomAccessFileOrArray implements DataInput {
                 }
             }
             else {
-            	System.out.println("Try as stream via resource");
               InputStream is = BaseFont.getResourceStream(filename);
                 if (is == null)
                     throw new IOException(MessageLocalization.getComposedMessage("1.not.found.as.file.or.resource", filename));

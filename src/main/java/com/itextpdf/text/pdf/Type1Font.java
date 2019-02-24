@@ -191,7 +191,7 @@ class Type1Font extends BaseFont
                     resourceAnchor = new FontsResourceAnchor();
                 is = getResourceStream(RESOURCE_PATH + afmFile + ".afm", resourceAnchor.getClass().getClassLoader());
                 if (is == null) {
-                	is = resourceAnchor.getClass().getResourceAsStream("fonts/"+ afmFile + ".afm");
+                 	is = resourceAnchor.getClass().getResourceAsStream(afmFile + ".afm");
                 }
                 if (is == null) {
                     String msg = MessageLocalization.getComposedMessage("1.not.found.as.resource", afmFile);

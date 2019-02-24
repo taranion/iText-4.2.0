@@ -59,11 +59,14 @@ import com.itextpdf.text.pdf.fonts.FontsResourceAnchor;
 public class GlyphList {
     private static HashMap unicode2names = new HashMap();
     private static HashMap names2unicode = new HashMap();
-        
+
     static {
         InputStream is = null;
         try {
             is = BaseFont.getResourceStream(BaseFont.RESOURCE_PATH + "glyphlist.txt", new FontsResourceAnchor().getClass().getClassLoader());
+            if (is == null) {
+            	is = FontsResourceAnchor.class.getResourceAsStream("glyphlist.txt");
+            }
             if (is == null) {
                 String msg = "glyphlist.txt not found as resource. (It must exist as resource in the package com.itextpdf.text.pdf.fonts)";
                 throw new Exception(msg);
@@ -112,11 +115,11 @@ public class GlyphList {
             }
         }
     }
-    
+
     public static int[] nameToUnicode(String name) {
         return (int[])names2unicode.get(name);
     }
-    
+
     public static String unicodeToName(int num) {
         return (String)unicode2names.get(new Integer(num));
     }
