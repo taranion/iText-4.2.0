@@ -4,13 +4,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.itextpdf</groupId>
+	<groupId>de.rpgframework</groupId>
 	<artifactId>itextpdf</artifactId>
 	<packaging>jar</packaging>
 	<name>iText, a Free Java-PDF library</name>
 	<version>4.2.0</version>
 	<description>iText, a free Java-PDF library</description>
 	<url>http://www.lowagie.com/iText/</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
 	<developers>
 		<developer>
 			<id>blowagie</id>
@@ -33,6 +38,14 @@
 			<name>Xavier Le Vourch</name>
 			<email>xlv@users.sourceforge.net</email>
 		</developer>
+        <developer>
+            <name>Stefan Prelle</name>
+            <email>stefan@rpgframework.de</email>
+            <timezone>GMT+1</timezone>
+            <roles>
+                <role>Converted to Maven and Java 11</role>
+            </roles>
+        </developer>
 	</developers>
 	<licenses>
 		<license>
@@ -70,13 +83,19 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>
-								com.itextpdf.tools.ToolboxAvailable
-							</mainClass>
+							<mainClass>com.itextpdf.tools.ToolboxAvailable</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						</manifest>
+                        <manifestEntries>
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Vendor>Stefan Prelle</Implementation-Vendor>
+                            <Build-Info>Java ${java.version} on ${os.name} at ${maven.build.timestamp}</Build-Info>
+                        </manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
@@ -90,4 +109,15 @@
 			</plugin>
 		</plugins>
 	</build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 </project>
