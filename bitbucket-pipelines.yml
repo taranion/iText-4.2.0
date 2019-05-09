@@ -1,0 +1,17 @@
+image: maven:3.6-jdk-11
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - maven
+        script: # Modify the commands below to build your repository.
+          - openssl aes-256-cbc -pass pass:$OPENSSL_PWD -in private-key.gpg.enc -out private-key.gpg -d
+          - gpg --import --no-tty --batch --yes private-key.gpg
+          - mvn -B -V -s settings.xml deploy -Dgpg.skip=true
+#    - step:
+#        name: Deploy to test
+#        image: maven:3.6-jdk-11
+#        deployment: test 
+#        script:
+#          - mvn -B -V -s settings.xml deploy -Dgpg.skip=true
